@@ -4,8 +4,9 @@ import (
 	solcast "../solcast"
 	datatypes "../solcast/types"
 	"log"
-	"fmt"
 	"errors"
+	"os"
+	"fmt"
 )
 
 /*
@@ -25,41 +26,61 @@ func Init() {
 }
 */
 
-func testRadiationForecast(location datatypes.LatLng) {
-	result := *solcast.RadiationForecast(location)
 
+func testRadiationForecast(location datatypes.LatLng) error {
+	result := solcast.RadiationForecast(location)
 	if len(result.Forecasts) != 336 {
-		errors.New("Unexpected amount of forecasts")
+		return errors.New("Unexpected amount of forecasts")
 	}
-
-	log.Printf("Forecast %v", result.Forecasts)
-	fmt.Println(result.Forecasts)
+	log.Printf("Forecast %v", len(result.Forecasts))
+	return nil
 }
 
-func testRadiationEstimatedActuals(location datatypes.LatLng) datatypes.RadiationEstimatedActuals {
+func testRadiationEstimatedActuals(location datatypes.LatLng) error {
 	result := solcast.RadiationEstimatedActuals(location)
-	return *result
+	if len(result.EstimatedActuals) < 300 {
+		return errors.New("Unexpected amount of estimated actuals")
+	}
+	log.Printf("Estimated Actuals %v", len(result.EstimatedActuals))
+	return nil
 }
 
+func testPowerForecast(location datatypes.PowerLatLng) error {
+	result := solcast.PowerForecast(location)
+	if len(result.Forecasts) != 336 {
+		return errors.New("Unexpected amount of forecasts")
+	}
+	log.Printf("Forecast %v", len(result.Forecasts))
+	return nil
+}
+
+func testPowerEstimatedActuals(location datatypes.PowerLatLng) error {
+	result := solcast.PowerEstimatedActuals(location)
+	if len(result.EstimatedActuals) < 300 {
+		return errors.New("Unexpected amount of estimated actuals")
+	}
+	log.Printf("Estimated Actuals %v", len(result.EstimatedActuals))
+	return nil
+}
 
 func main() {
 	//solcast.Init()
-	testLocation := datatypes.LatLng{ Longitude: -97, Latitude: 32}
-	testRadiationForecast(testLocation)
-
-
-	//items := len(radiationForecast.Forecasts)
-
-	//radiation_estimated_actuals := testRadiationEstimatedActuals(testLocation)
-	//log.Printf("EstimatedActuals %v", radiation_estimated_actuals)
-
-	/*
-	radiation := struct {
-		forecast datatypes.RadiationForecast
-		actuals	datatypes.RadiationEstimatedActuals
-	}{
-		solcast.RadiationForecast(testLocation),
-		solcast.RadiationEstimatedActuals(testLocation),
+	testRadiationLocation := datatypes.LatLng{ Longitude: -97, Latitude: 32}
+	if err := testRadiationForecast(testRadiationLocation); err != nil {
+		fmt.Print(err)
+		os.Exit(-1)
 	}
-	*/
+	if err := testRadiationEstimatedActuals(testRadiationLocation); err != nil {
+		fmt.Print(err)
+		os.Exit(-1)
+	}
+	testPowerLocation := datatypes.PowerLatLng{ Capacity: 1000, LatLng: testRadiationLocation }
+	if err := testPowerForecast(testPowerLocation); err != nil {
+		fmt.Print(err)
+		os.Exit(-1)
+	}
+	if err := testPowerEstimatedActuals(testPowerLocation); err != nil {
+		fmt.Print(err)
+		os.Exit(-1)
+	}
 }

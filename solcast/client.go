@@ -2,11 +2,14 @@ package solcast
 
 import (
 	datatypes "./types"
-	"github.com/go-resty/resty"
 	"strconv"
 	"math"
-	"log"
-	"github.com/jimlawless/whereami"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"encoding/json"
+	"time"
+	"github.com/google/go-querystring/query"
 )
 
 func round(num float64) int {
@@ -23,34 +26,91 @@ func toString(num float64, precision int) string {
 	return result
 }
 
-func RadiationEstimatedActuals(location datatypes.LatLng) *datatypes.RadiationEstimatedActuals {
-	currentConfig := Read()
-	resp, err := resty.R().SetQueryParams(map[string]string{
-		"longitude": toString(location.Longitude, 6),
-		"latitude": toString(location.Latitude, 6),
-		"api_key": currentConfig.APIKey,
-	}).SetResult(&datatypes.RadiationEstimatedActuals{}).Get(currentConfig.Url + "/radiation/estimated_actuals")
+func getData(url string) []byte {
 
-	if err != nil {
-		log.Printf("%v failed %v", whereami.WhereAmI(), err)
+	netClient := &http.Client{
+		Timeout: time.Minute * 5,
 	}
-	result := resp.Result().(*datatypes.RadiationEstimatedActuals)
-	return result
+
+	resp, err := netClient.Get(url)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	return body
 }
 
-func RadiationForecast(location datatypes.LatLng) interface{} {
+func PowerEstimatedActuals(location datatypes.PowerLatLng) datatypes.PowerEstimatedActualsResponse {
+	results := datatypes.PowerEstimatedActualsResponse{}
 	currentConfig := Read()
-	resp, err := resty.R().SetQueryParams(map[string]string{
-		"longitude": toString(location.Longitude, 6),
-		"latitude": toString(location.Latitude, 6),
-		"api_key": currentConfig.APIKey,
-	}).SetResult(&datatypes.RadiationForecast{}).Get(currentConfig.Url + "/radiation/forecasts")
-
-	if err != nil {
-		log.Printf("%v failed %v", whereami.WhereAmI(), err)
+	queryParams := &datatypes.PowerQueryParams{
+		Format: "json",
+		Latitude: toString(location.Latitude, 6),
+		Longitude: toString(location.Longitude, 6),
+		APIKey: currentConfig.APIKey,
+		Capacity: location.Capacity,
 	}
-	//result := resp.Result().(*datatypes.RadiationForecast)
-	data := resp.Result()
-	return data
+	v, _ := query.Values(queryParams)
+	url := fmt.Sprintf("%v/pv_power/estimated_actuals?%v", currentConfig.Url, v.Encode())
+	if err := json.Unmarshal(getData(url), &results); err != nil {
+		panic(err)
+	}
+	return results
+}
+
+func RadiationEstimatedActuals(location datatypes.LatLng) datatypes.RadiationEstimatedActuals {
+	results := datatypes.RadiationEstimatedActuals{}
+	currentConfig := Read()
+	queryParams := &datatypes.RadiationQueryParams{
+		Format: "json",
+		Latitude: toString(location.Latitude, 6),
+		Longitude: toString(location.Longitude, 6),
+		APIKey: currentConfig.APIKey,
+	}
+	v, _ := query.Values(queryParams)
+	url := fmt.Sprintf("%v/radiation/estimated_actuals?%v", currentConfig.Url, v.Encode())
+	if err := json.Unmarshal(getData(url), &results); err != nil {
+		panic(err)
+	}
+	return results
+}
+
+func PowerForecast(location datatypes.PowerLatLng) datatypes.PowerForecastsResponse {
+	results := datatypes.PowerForecastsResponse{}
+	currentConfig := Read()
+	queryParams := &datatypes.PowerQueryParams{
+		Format: "json",
+		Latitude: toString(location.Latitude, 6),
+		Longitude: toString(location.Longitude, 6),
+		APIKey: currentConfig.APIKey,
+		Capacity: location.Capacity,
+	}
+	v, _ := query.Values(queryParams)
+	url := fmt.Sprintf("%v/pv_power/forecasts?%v", currentConfig.Url, v.Encode())
+	if err := json.Unmarshal(getData(url), &results); err != nil {
+		panic(err)
+	}
+	return results
+}
+
+func RadiationForecast(location datatypes.LatLng) datatypes.RadiationForecastsResponse {
+	results := datatypes.RadiationForecastsResponse{}
+	currentConfig := Read()
+	queryParams := &datatypes.RadiationQueryParams{
+		Format: "json",
+		Latitude: toString(location.Latitude, 6),
+		Longitude: toString(location.Longitude, 6),
+		APIKey: currentConfig.APIKey,
+	}
+	v, _ := query.Values(queryParams)
+	url := fmt.Sprintf("%v/radiation/forecasts?%v", currentConfig.Url, v.Encode())
+	if err := json.Unmarshal(getData(url), &results); err != nil {
+		panic(err)
+	}
+	return results
 }
 

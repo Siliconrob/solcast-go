@@ -2,7 +2,14 @@ package solcast
 
 import "time"
 
-type RadiationForecast struct {
+type RadiationQueryParams struct {
+	Format string `url:"format,omitempty"`
+	Latitude string `url:"latitude,omitempty"`
+	Longitude string `url:"longitude,omitempty"`
+	APIKey string `url:"api_key,omitempty"`
+}
+
+type RadiationForecastsResponse struct {
 	Forecasts []struct {
 		Ghi          int       `json:"ghi"`
 		Ghi90        int       `json:"ghi90"`
