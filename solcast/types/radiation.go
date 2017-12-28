@@ -1,4 +1,4 @@
-package types
+package solcast
 
 import "time"
 
@@ -22,7 +22,7 @@ type RadiationForecast struct {
 }
 
 type RadiationEstimatedActuals struct {
-	Forecasts []struct {
+	EstimatedActuals []struct {
 		Ghi          int       `json:"ghi"`
 		Ebh          int       `json:"ebh"`
 		Dni          int       `json:"dni"`
