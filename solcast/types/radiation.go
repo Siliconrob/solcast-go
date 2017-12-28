@@ -20,3 +20,15 @@ type RadiationForecast struct {
 		Period       string    `json:"period"`
 	} `json:"forecasts"`
 }
+
+type RadiationEstimatedActuals struct {
+	Forecasts []struct {
+		Ghi          int       `json:"ghi"`
+		Ebh          int       `json:"ebh"`
+		Dni          int       `json:"dni"`
+		Dhi          int       `json:"dhi"`
+		CloudOpacity int       `json:"cloud_opacity"`
+		PeriodEnd    time.Time `json:"period_end"`
+		Period       string    `json:"period"`
+	} `json:"estimated_actuals"`
+}

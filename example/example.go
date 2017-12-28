@@ -1,11 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"github.com/Siliconrob/solcast-go/solcast"
+	solcast "../solcast"
+	"os"
+	"log"
 )
 
 func main() {
-	APIKey := "<API_KEY_SOLCAST>"
-	fmt.Print("API Key %s", &APIKey)
+	config := solcast.Read()
+	if config.APIKey == "" {
+		log.Printf("No valid Solcast API key available to use set environment variable or pass argument")
+		os.Exit(-1)
+	}
+	log.Printf("API Key: %s", config.APIKey)
 }
