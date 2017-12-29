@@ -1,8 +1,8 @@
 package main
 
 import (
-	solcast "../solcast"
-	datatypes "../solcast/types"
+	solcast "github.com/Siliconrob/solcast-go/solcast"
+	datatypes "github.com/Siliconrob/solcast-go/solcast/types"
 	"errors"
 	"fmt"
 	"log"

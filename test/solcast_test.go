@@ -1,8 +1,8 @@
 package solcast
 
 import (
-	solcast "../solcast"
-	datatypes "../solcast/types"
+	solcast "github.com/Siliconrob/solcast-go/solcast"
+	datatypes "github.com/Siliconrob/solcast-go/solcast/types"
 	"github.com/jimlawless/whereami"
 	"github.com/stretchr/testify/assert"
 	"log"

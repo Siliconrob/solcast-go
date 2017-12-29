@@ -1,7 +1,7 @@
 package solcast
 
 import (
-	datatypes "./types"
+	datatypes "github.com/Siliconrob/solcast-go/solcast/types"
 	"encoding/json"
 	"fmt"
 	"github.com/google/go-querystring/query"
