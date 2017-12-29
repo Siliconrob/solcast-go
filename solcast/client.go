@@ -68,27 +68,27 @@ func getData(url string) ([]byte, error) {
 
 	resp, err := netClient.Get(url)
 	if err != nil {
-		log.Printf("Unable to create HTTP client", whereami.WhereAmI())
+		log.Printf("Unable to create HTTP client %v", whereami.WhereAmI())
 		panic(err)
 	}
 	if resp.StatusCode >= 500 && resp.StatusCode < 600 {
-		log.Printf("Solcast API error, post to GitHub or here https://forums.solcast.com.au/ please", whereami.WhereAmI())
+		log.Printf("Solcast API error, post to GitHub or here https://forums.solcast.com.au/ please %v", whereami.WhereAmI())
 		panic(err)
 	}
 	if resp.StatusCode >= 400 && resp.StatusCode < 500 {
 		if resp.StatusCode == 429 {
 			limits := getApiRateLimits(resp)
-			log.Printf("Request rate limit exceeded please wait and try again %v", limits, whereami.WhereAmI())
+			log.Printf("Request rate limit exceeded please wait and try again %v %v", limits, whereami.WhereAmI())
 			return []byte{}, errors.New(fmt.Sprintf("Retry request at %v", limits.ResetTime))
 		}
-		log.Printf("Bad request, check your inputs", whereami.WhereAmI())
+		log.Printf("Bad request, check your inputs %v", whereami.WhereAmI())
 		panic(err)
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Failure to read the HTTP body", whereami.WhereAmI())
+		log.Printf("Failure to read the HTTP body %v", whereami.WhereAmI())
 		panic(err)
 	}
 	return body, nil
