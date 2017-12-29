@@ -2,6 +2,7 @@ package solcast
 
 import "time"
 
+// Possible parameters that the Radiation Forecasts/EstimatedActuals services can work with
 type RadiationQueryParams struct {
 	Format    string `url:"format,omitempty"`
 	Latitude  string `url:"latitude,omitempty"`
@@ -9,6 +10,7 @@ type RadiationQueryParams struct {
 	APIKey    string `url:"api_key,omitempty"`
 }
 
+// JSON API response from /radiation/forecasts
 type RadiationForecastsResponse struct {
 	Forecasts []struct {
 		Ghi          int       `json:"ghi"`
@@ -28,6 +30,7 @@ type RadiationForecastsResponse struct {
 	} `json:"forecasts"`
 }
 
+// JSON API response from /radiation/estimated_actuals
 type RadiationEstimatedActualsResponse struct {
 	EstimatedActuals []struct {
 		Ghi          int       `json:"ghi"`

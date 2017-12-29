@@ -2,6 +2,7 @@ package solcast
 
 import "time"
 
+// JSON API response from /pv_power/forecasts
 type PowerForecastsResponse struct {
 	Forecasts []struct {
 		PeriodEnd  time.Time `json:"period_end"`
@@ -10,6 +11,7 @@ type PowerForecastsResponse struct {
 	} `json:"forecasts"`
 }
 
+// JSON API response from /pv_power/estimated_actuals
 type PowerEstimatedActualsResponse struct {
 	EstimatedActuals []struct {
 		PeriodEnd  time.Time `json:"period_end"`
@@ -18,6 +20,7 @@ type PowerEstimatedActualsResponse struct {
 	} `json:"estimated_actuals"`
 }
 
+// Possible parameters that the PvPower Forecasts/EstimatedActuals services can work with
 type PowerQueryParams struct {
 	Format      string    `url:"format,omitempty"`
 	Latitude    string    `url:"latitude,omitempty"`
