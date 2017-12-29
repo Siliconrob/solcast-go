@@ -1,8 +1,6 @@
 language: go
 sudo: false
 go:
-  - 1.9
-  - tip
-install: make get-travis-deps
-script: make travis-check
-after_success: goveralls
+  - release
+script:
+ - go test -v ./...
