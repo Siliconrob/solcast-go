@@ -15,6 +15,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+type HttpResponse struct {
+	url      string
+	response *http.Response
+	err      error
+}
+
 func round(num float64) int {
 	return int(num + math.Copysign(0.5, num))
 }
@@ -122,6 +128,24 @@ func PowerEstimatedActuals(location datatypes.PowerLatLng, ) datatypes.PowerEsti
 	return powerEstimatedActuals(location, Read())
 }
 
+func asyncPowerEstimatedActuals(location datatypes.PowerLatLng, config Config) <- chan datatypes.PowerEstimatedActualsResponse {
+	ch := make(chan datatypes.PowerEstimatedActualsResponse, 1) // buffered
+	go func(location datatypes.PowerLatLng) {
+		ch <- powerEstimatedActuals(location, config)
+	}(location)
+	return ch
+}
+
+func AsyncPowerEstimatedActuals(location datatypes.PowerLatLng) <- chan datatypes.PowerEstimatedActualsResponse {
+	return asyncPowerEstimatedActuals(location, Read())
+}
+
+func AsyncPowerEstimatedActualsWithKey(location datatypes.PowerLatLng, apiKey string) <- chan datatypes.PowerEstimatedActualsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return asyncPowerEstimatedActuals(location, config)
+}
+
 func radiationEstimatedActuals(location datatypes.LatLng, config Config) datatypes.RadiationEstimatedActualsResponse {
 	results := datatypes.RadiationEstimatedActualsResponse{}
 	queryParams := &datatypes.RadiationQueryParams{
@@ -154,6 +178,24 @@ func RadiationEstimatedActuals(location datatypes.LatLng) datatypes.RadiationEst
 	return radiationEstimatedActuals(location, Read())
 }
 
+func asyncRadiationEstimatedActuals(location datatypes.LatLng, config Config) <- chan datatypes.RadiationEstimatedActualsResponse {
+	ch := make(chan datatypes.RadiationEstimatedActualsResponse, 1) // buffered
+	go func(location datatypes.LatLng) {
+		ch <- radiationEstimatedActuals(location, config)
+	}(location)
+	return ch
+}
+
+func AsyncRadiationEstimatedActuals(location datatypes.LatLng) <- chan datatypes.RadiationEstimatedActualsResponse {
+	return asyncRadiationEstimatedActuals(location, Read())
+}
+
+func AsyncRadiationEstimatedActualsWithKey(location datatypes.LatLng, apiKey string) <- chan datatypes.RadiationEstimatedActualsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return asyncRadiationEstimatedActuals(location, config)
+}
+
 func powerForecast(location datatypes.PowerLatLng, config Config) datatypes.PowerForecastsResponse {
 	results := datatypes.PowerForecastsResponse{}
 	queryParams := &datatypes.PowerQueryParams{
@@ -177,16 +219,33 @@ func powerForecast(location datatypes.PowerLatLng, config Config) datatypes.Powe
 	return results
 }
 
+func PowerForecast(location datatypes.PowerLatLng) datatypes.PowerForecastsResponse {
+	return powerForecast(location, Read())
+}
+
 func PowerForecastWithKey(location datatypes.PowerLatLng, apiKey string) datatypes.PowerForecastsResponse {
 	config := Read()
 	config.APIKey = apiKey
 	return powerForecast(location, config)
 }
 
-func PowerForecast(location datatypes.PowerLatLng) datatypes.PowerForecastsResponse {
-	return powerForecast(location, Read())
+func asyncPowerForecast(location datatypes.PowerLatLng, config Config) <- chan datatypes.PowerForecastsResponse {
+	ch := make(chan datatypes.PowerForecastsResponse, 1) // buffered
+	go func(location datatypes.PowerLatLng) {
+		ch <- powerForecast(location, config)
+	}(location)
+	return ch
 }
 
+func AsyncPowerForecast(location datatypes.PowerLatLng) <- chan datatypes.PowerForecastsResponse {
+	return asyncPowerForecast(location, Read())
+}
+
+func AsyncPowerForecastWithKey(location datatypes.PowerLatLng, apiKey string) <- chan datatypes.PowerForecastsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return asyncPowerForecast(location, config)
+}
 
 func radiationForecast(location datatypes.LatLng, config Config) datatypes.RadiationForecastsResponse {
 	results := datatypes.RadiationForecastsResponse{}
@@ -218,4 +277,102 @@ func RadiationForecastWithKey(location datatypes.LatLng, apiKey string) datatype
 
 func RadiationForecast(location datatypes.LatLng) datatypes.RadiationForecastsResponse {
 	return radiationForecast(location, Read())
+}
+
+func asyncRadiationForecast(location datatypes.LatLng, config Config) <- chan datatypes.RadiationForecastsResponse {
+	ch := make(chan datatypes.RadiationForecastsResponse, 1) // buffered
+	go func(location datatypes.LatLng) {
+		ch <- radiationForecast(location, config)
+	}(location)
+	return ch
+}
+
+func AsyncRadiationForecast(location datatypes.LatLng) <- chan datatypes.RadiationForecastsResponse {
+	return asyncRadiationForecast(location, Read())
+}
+
+func AsyncRadiationForecastWithKey(location datatypes.LatLng, apiKey string) <- chan datatypes.RadiationForecastsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return asyncRadiationForecast(location, config)
+}
+
+func batchPowerForecast(locations []datatypes.PowerLatLng, config Config) <- chan datatypes.PowerForecastsResponse {
+	ch := make(chan datatypes.PowerForecastsResponse, len(locations)) // buffered
+	for _, location := range locations {
+		go func(location datatypes.PowerLatLng) {
+			ch <- powerForecast(location, config)
+		}(location)
+	}
+	return ch
+}
+
+func BatchPowerForecast(locations []datatypes.PowerLatLng) <- chan datatypes.PowerForecastsResponse {
+	return batchPowerForecast(locations, Read())
+}
+
+func BatchPowerForecastWithKey(locations []datatypes.PowerLatLng, apiKey string) <- chan datatypes.PowerForecastsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return batchPowerForecast(locations, Read())
+}
+
+func batchPowerEstimatedActuals(locations []datatypes.PowerLatLng, config Config) <- chan datatypes.PowerEstimatedActualsResponse {
+	ch := make(chan datatypes.PowerEstimatedActualsResponse, len(locations)) // buffered
+	for _, location := range locations {
+		go func(location datatypes.PowerLatLng) {
+			ch <- powerEstimatedActuals(location, config)
+		}(location)
+	}
+	return ch
+}
+
+func BatchPowerEstimatedActuals(locations []datatypes.PowerLatLng) <- chan datatypes.PowerEstimatedActualsResponse {
+	return batchPowerEstimatedActuals(locations, Read())
+}
+
+func BatchPowerEstimatedActualsWithKey(locations []datatypes.PowerLatLng, apiKey string) <- chan datatypes.PowerEstimatedActualsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return batchPowerEstimatedActuals(locations, Read())
+}
+
+func batchRadiationForecast(locations []datatypes.LatLng, config Config) <- chan datatypes.RadiationForecastsResponse {
+	ch := make(chan datatypes.RadiationForecastsResponse, len(locations)) // buffered
+	for _, location := range locations {
+		go func(location datatypes.LatLng) {
+			ch <- radiationForecast(location, config)
+		}(location)
+	}
+	return ch
+}
+
+func BatchRadiationForecast(locations []datatypes.LatLng) <- chan datatypes.RadiationForecastsResponse {
+	return batchRadiationForecast(locations, Read())
+}
+
+func BatchRadiationForecastWithKey(locations []datatypes.LatLng, apiKey string) <- chan datatypes.RadiationForecastsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return batchRadiationForecast(locations, Read())
+}
+
+func batchRadiationEstimatedActuals(locations []datatypes.LatLng, config Config) <- chan datatypes.RadiationEstimatedActualsResponse {
+	ch := make(chan datatypes.RadiationEstimatedActualsResponse, len(locations)) // buffered
+	for _, location := range locations {
+		go func(location datatypes.LatLng) {
+			ch <- radiationEstimatedActuals(location, config)
+		}(location)
+	}
+	return ch
+}
+
+func BatchRadiationEstimatedActuals(locations []datatypes.LatLng) <- chan datatypes.RadiationEstimatedActualsResponse {
+	return batchRadiationEstimatedActuals(locations, Read())
+}
+
+func BatchRadiationEstimatedActualsWithKey(locations []datatypes.LatLng, apiKey string) <- chan datatypes.RadiationEstimatedActualsResponse {
+	config := Read()
+	config.APIKey = apiKey
+	return batchRadiationEstimatedActuals(locations, Read())
 }

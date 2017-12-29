@@ -9,6 +9,8 @@ import (
 	"fmt"
 )
 
+var YOUR_API_KEY = "<API KEY HERE>"
+
 func testRadiationForecast(location datatypes.LatLng) error {
 	result := solcast.RadiationForecast(location)
 	if len(result.Forecasts) != 336 {
@@ -27,8 +29,17 @@ func testRadiationEstimatedActuals(location datatypes.LatLng) error {
 	return nil
 }
 
+func asyncTestPowerForecast(location datatypes.PowerLatLng) error {
+	result := <-solcast.AsyncPowerForecastWithKey(location, YOUR_API_KEY)
+	if len(result.Forecasts) != 336 {
+		return errors.New("Unexpected amount of forecasts")
+	}
+	log.Printf("Forecast %v", len(result.Forecasts))
+	return nil
+}
+
 func testPowerForecast(location datatypes.PowerLatLng) error {
-	result := solcast.PowerForecast(location)
+	result := solcast.PowerForecastWithKey(location, YOUR_API_KEY)
 	if len(result.Forecasts) != 336 {
 		return errors.New("Unexpected amount of forecasts")
 	}
@@ -56,7 +67,7 @@ func main() {
 		os.Exit(-1)
 	}
 	testPowerLocation := datatypes.PowerLatLng{ Capacity: 1000, LatLng: testRadiationLocation }
-	if err := testPowerForecast(testPowerLocation); err != nil {
+	if err := asyncTestPowerForecast(testPowerLocation); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)
 	}
