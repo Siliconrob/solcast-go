@@ -3,10 +3,10 @@ package solcast
 import "time"
 
 type RadiationQueryParams struct {
-	Format string `url:"format,omitempty"`
-	Latitude string `url:"latitude,omitempty"`
+	Format    string `url:"format,omitempty"`
+	Latitude  string `url:"latitude,omitempty"`
 	Longitude string `url:"longitude,omitempty"`
-	APIKey string `url:"api_key,omitempty"`
+	APIKey    string `url:"api_key,omitempty"`
 }
 
 type RadiationForecastsResponse struct {

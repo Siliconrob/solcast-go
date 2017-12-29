@@ -3,10 +3,10 @@ package main
 import (
 	solcast "../solcast"
 	datatypes "../solcast/types"
-	"log"
 	"errors"
-	"os"
 	"fmt"
+	"log"
+	"os"
 )
 
 var YOUR_API_KEY = "<API KEY HERE>"
@@ -57,7 +57,7 @@ func testPowerEstimatedActuals(location datatypes.PowerLatLng) error {
 }
 
 func main() {
-	testRadiationLocation := datatypes.LatLng{ Longitude: -97, Latitude: 32}
+	testRadiationLocation := datatypes.LatLng{Longitude: -97, Latitude: 32}
 	if err := testRadiationForecast(testRadiationLocation); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)
@@ -66,7 +66,7 @@ func main() {
 		fmt.Print(err)
 		os.Exit(-1)
 	}
-	testPowerLocation := datatypes.PowerLatLng{ Capacity: 1000, LatLng: testRadiationLocation }
+	testPowerLocation := datatypes.PowerLatLng{Capacity: 1000, LatLng: testRadiationLocation}
 	if err := asyncTestPowerForecast(testPowerLocation); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)

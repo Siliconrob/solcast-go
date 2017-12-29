@@ -1,16 +1,16 @@
 package solcast
 
 import (
-	"testing"
 	solcast "../solcast"
 	datatypes "../solcast/types"
+	"github.com/jimlawless/whereami"
 	"github.com/stretchr/testify/assert"
 	"log"
-	"github.com/jimlawless/whereami"
+	"testing"
 )
 
-var radiationLocation = datatypes.LatLng{ Longitude: -97, Latitude: 32}
-var powerLocation = datatypes.PowerLatLng{ Capacity: 1000, LatLng: radiationLocation }
+var radiationLocation = datatypes.LatLng{Longitude: -97, Latitude: 32}
+var powerLocation = datatypes.PowerLatLng{Capacity: 1000, LatLng: radiationLocation}
 
 const forecastCount = 336
 const actualsCount = 317
