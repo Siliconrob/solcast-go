@@ -10,6 +10,8 @@ import (
 	"encoding/json"
 	"time"
 	"github.com/google/go-querystring/query"
+	"log"
+	"github.com/jimlawless/whereami"
 )
 
 func round(num float64) int {
@@ -34,11 +36,13 @@ func getData(url string) []byte {
 
 	resp, err := netClient.Get(url)
 	if err != nil {
+		log.Printf("Unable to create HTTP client", whereami.WhereAmI())
 		panic(err)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Failure to read the HTTP body", whereami.WhereAmI())
 		panic(err)
 	}
 	return body
@@ -57,6 +61,7 @@ func PowerEstimatedActuals(location datatypes.PowerLatLng) datatypes.PowerEstima
 	v, _ := query.Values(queryParams)
 	url := fmt.Sprintf("%v/pv_power/estimated_actuals?%v", currentConfig.Url, v.Encode())
 	if err := json.Unmarshal(getData(url), &results); err != nil {
+		log.Printf("Failure to parse HTTP response body to %v", whereami.WhereAmI())
 		panic(err)
 	}
 	return results
@@ -74,6 +79,7 @@ func RadiationEstimatedActuals(location datatypes.LatLng) datatypes.RadiationEst
 	v, _ := query.Values(queryParams)
 	url := fmt.Sprintf("%v/radiation/estimated_actuals?%v", currentConfig.Url, v.Encode())
 	if err := json.Unmarshal(getData(url), &results); err != nil {
+		log.Printf("Failure to parse HTTP response body to %v", whereami.WhereAmI())
 		panic(err)
 	}
 	return results
@@ -92,6 +98,7 @@ func PowerForecast(location datatypes.PowerLatLng) datatypes.PowerForecastsRespo
 	v, _ := query.Values(queryParams)
 	url := fmt.Sprintf("%v/pv_power/forecasts?%v", currentConfig.Url, v.Encode())
 	if err := json.Unmarshal(getData(url), &results); err != nil {
+		log.Printf("Failure to parse HTTP response body to %v", whereami.WhereAmI())
 		panic(err)
 	}
 	return results
@@ -109,8 +116,8 @@ func RadiationForecast(location datatypes.LatLng) datatypes.RadiationForecastsRe
 	v, _ := query.Values(queryParams)
 	url := fmt.Sprintf("%v/radiation/forecasts?%v", currentConfig.Url, v.Encode())
 	if err := json.Unmarshal(getData(url), &results); err != nil {
+		log.Printf("Failure to parse HTTP response body to %v", whereami.WhereAmI())
 		panic(err)
 	}
 	return results
 }
-

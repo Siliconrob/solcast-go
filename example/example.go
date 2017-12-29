@@ -9,24 +9,6 @@ import (
 	"fmt"
 )
 
-/*
-func Init() {
-	if currentKey != "" && len(currentKey) == 32 {
-		return
-	}
-	var commandArgKey string
-	flag.StringVar(&commandArgKey, "key", "", "API key for Solcast library")
-	flag.Parse()
-
-	if len(commandArgKey) == 32 {
-		currentKey = commandArgKey
-	} else {
-		currentKey = os.Getenv(Solcast_API_KeyName)
-	}
-}
-*/
-
-
 func testRadiationForecast(location datatypes.LatLng) error {
 	result := solcast.RadiationForecast(location)
 	if len(result.Forecasts) != 336 {
@@ -38,7 +20,7 @@ func testRadiationForecast(location datatypes.LatLng) error {
 
 func testRadiationEstimatedActuals(location datatypes.LatLng) error {
 	result := solcast.RadiationEstimatedActuals(location)
-	if len(result.EstimatedActuals) < 300 {
+	if len(result.EstimatedActuals) != 317 {
 		return errors.New("Unexpected amount of estimated actuals")
 	}
 	log.Printf("Estimated Actuals %v", len(result.EstimatedActuals))
@@ -56,7 +38,7 @@ func testPowerForecast(location datatypes.PowerLatLng) error {
 
 func testPowerEstimatedActuals(location datatypes.PowerLatLng) error {
 	result := solcast.PowerEstimatedActuals(location)
-	if len(result.EstimatedActuals) < 300 {
+	if len(result.EstimatedActuals) != 317 {
 		return errors.New("Unexpected amount of estimated actuals")
 	}
 	log.Printf("Estimated Actuals %v", len(result.EstimatedActuals))
@@ -64,7 +46,6 @@ func testPowerEstimatedActuals(location datatypes.PowerLatLng) error {
 }
 
 func main() {
-	//solcast.Init()
 	testRadiationLocation := datatypes.LatLng{ Longitude: -97, Latitude: 32}
 	if err := testRadiationForecast(testRadiationLocation); err != nil {
 		fmt.Print(err)
