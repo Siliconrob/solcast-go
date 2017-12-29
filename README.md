@@ -1,5 +1,3 @@
-# WORK IN PROGRESS - Currently undergoing changes and updates and once ready for use will remove this disclaimer
-
 [![Build Status](https://travis-ci.org/Siliconrob/solcast-go.svg?branch=master)](https://travis-ci.org/Siliconrob/solcast-go) [![Go Report Card](https://goreportcard.com/badge/github.com/Siliconrob/solcast-go)](https://goreportcard.com/report/github.com/Siliconrob/solcast-go) [![GoDoc](https://godoc.org/github.com/Siliconrob/solcast-go/solcast?status.svg)](https://godoc.org/github.com/Siliconrob/solcast-go/solcast) 
 
 ### Live Glitch :sun_with_face:[Demo](https://solcast-demo.glitch.me/):sun_with_face:
@@ -99,6 +97,17 @@ Los Angeles, USA | 34.052235 | -118.243683
 
 
 ### Examples
+
+```go
+
+import (
+	solcast "github.com/Siliconrob/solcast-go/solcast"
+	datatypes "github.com/Siliconrob/solcast-go/solcast/types"
+)
+
+forecasts_async := solcast.RadiationForecast(datatypes.LatLng{Longitude: -97, Latitude: 32})
+```
+  
 
 #### NOTE: 
 You can use standard environment variables to hold your API key and not need to pass the optional `apiKey` to the current methods
