@@ -12,7 +12,7 @@ This module allows a registered users to query the Solcast API [https://api.solc
 
 ## Install
 ```
-go get https://github.com/Siliconrob/solcast-go/solcast
+go get github.com/Siliconrob/solcast-go/solcast
 ```
 
 ## Documentation
