@@ -28,7 +28,7 @@ type RadiationForecastsResponse struct {
 	} `json:"forecasts"`
 }
 
-type RadiationEstimatedActuals struct {
+type RadiationEstimatedActualsResponse struct {
 	EstimatedActuals []struct {
 		Ghi          int       `json:"ghi"`
 		Ebh          int       `json:"ebh"`
