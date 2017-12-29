@@ -4,15 +4,15 @@ import (
 	datatypes "github.com/Siliconrob/solcast-go/solcast/types"
 	"encoding/json"
 	"fmt"
-	"github.com/google/go-querystring/query"
-	"github.com/jimlawless/whereami"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
 	"strconv"
 	"time"
+	"github.com/jimlawless/whereami"
+	"github.com/google/go-querystring/query"
+	"github.com/pkg/errors"
 )
 
 type HttpResponse struct {

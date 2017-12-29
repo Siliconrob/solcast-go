@@ -2,5 +2,7 @@ language: go
 sudo: false
 go:
   - master
+install:
+ - go get -t ./...
 script:
  - go test -v ./...
