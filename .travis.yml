@@ -1,6 +1,6 @@
 language: go
 sudo: false
 go:
-  - release
+  - master
 script:
  - go test -v ./...
