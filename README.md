@@ -1,5 +1,7 @@
 # WORK IN PROGRESS - Currently undergoing changes and updates and once ready for use will remove this disclaimer
 
+[![Build Status](https://travis-ci.org/Siliconrob/solcast-go.svg?branch=master)](https://travis-ci.org/Siliconrob/solcast-go) [![Go Report Card](https://goreportcard.com/badge/github.com/Siliconrob/solcast-go)](https://goreportcard.com/report/github.com/Siliconrob/solcast-go) [![GoDoc](https://godoc.org/github.com/Siliconrob/solcast-go/solcast?status.svg)](https://godoc.org/github.com/Siliconrob/solcast-go/solcast) 
+
 ### Live Glitch :sun_with_face:[Demo](https://solcast-demo.glitch.me/):sun_with_face:
 
 # Solcast Go API Client library
@@ -7,6 +9,15 @@
 Go client library for querying the [Solcast API](https://api.solcast.com.au) 
 
 This module allows a registered users to query the Solcast API [https://api.solcast.com.au](https://api.solcast.com.au).  You will need to register your user account to obtain an API key [https://solcast.com.au/api/register](https://solcast.com.au/api/register/).  Without an API key you will not be able to successfully obtain valid API results.
+
+## Install
+```
+go get https://github.com/Siliconrob/solcast-go/solcast
+```
+
+## Documentation
+
+Read [GoDoc](https://godoc.org/github.com/Siliconrob/solcast-go/solcast)
 
 ### Windows setup Solcast API Key
 
