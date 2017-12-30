@@ -105,9 +105,30 @@ import (
 	datatypes "github.com/Siliconrob/solcast-go/solcast/types"
 )
 
-forecasts_async := solcast.RadiationForecast(datatypes.LatLng{Longitude: -97, Latitude: 32})
+rad_forecasts := solcast.RadiationForecast(datatypes.LatLng{Longitude: -97, Latitude: 32})
 ```
-  
+
+#### JSON sample results
+```
+{ forecasts: 
+   [ { ghi: 0,
+       ghi90: 0,
+       ghi10: 0,
+       ebh: 0,
+       dni: 0,
+       dni10: 0,
+       dni90: 0,
+       dhi: 0,
+       air_temp: 10,
+       zenith: 103,
+       azimuth: -88,
+       cloud_opacity: 3,
+       period_end: '2017-08-31T19:30:00.0000000Z',
+       period: 'PT30M' },
+    ...
+   ]
+}
+```  
 
 #### NOTE: 
 You can use standard environment variables to hold your API key and not need to pass the optional `apiKey` to the current methods
