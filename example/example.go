@@ -29,12 +29,13 @@ func testRadiationEstimatedActuals(location datatypes.LatLng) error {
 	return nil
 }
 
-func asyncTestPowerForecast(location datatypes.PowerLatLng) error {
-	result := <-solcast.AsyncPowerForecastWithKey(location, YOUR_API_KEY)
-	if len(result.Forecasts) != 336 {
-		return errors.New("Unexpected amount of forecasts")
+func asyncTestRadiationForecast(locations[] datatypes.LatLng) error {
+
+	results := solcast.BatchRadiationForecast(locations)
+
+	for current := 0; current < len(results); current++ {
 	}
-	log.Printf("Forecast %v", len(result.Forecasts))
+
 	return nil
 }
 
@@ -58,19 +59,25 @@ func testPowerEstimatedActuals(location datatypes.PowerLatLng) error {
 
 func main() {
 	testRadiationLocation := datatypes.LatLng{Longitude: -97, Latitude: 32}
-	if err := testRadiationForecast(testRadiationLocation); err != nil {
+	/*if err := testRadiationForecast(testRadiationLocation); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)
 	}
 	if err := testRadiationEstimatedActuals(testRadiationLocation); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)
-	}
-	testPowerLocation := datatypes.PowerLatLng{Capacity: 1000, LatLng: testRadiationLocation}
-	if err := asyncTestPowerForecast(testPowerLocation); err != nil {
+	}*/
+	var testRadiationLocations []datatypes.LatLng
+	testRadiationLocations = append(testRadiationLocations, testRadiationLocation)
+	if err := asyncTestRadiationForecast(testRadiationLocations); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)
 	}
+
+
+	testPowerLocation := datatypes.PowerLatLng{Capacity: 1000, LatLng: testRadiationLocation}
+	var testPowerLocations []datatypes.PowerLatLng
+	testPowerLocations = append(testPowerLocations, testPowerLocation)
 	if err := testPowerEstimatedActuals(testPowerLocation); err != nil {
 		fmt.Print(err)
 		os.Exit(-1)
